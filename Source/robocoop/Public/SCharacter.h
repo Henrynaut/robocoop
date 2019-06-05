@@ -6,6 +6,9 @@
 #include "GameFramework/Character.h"
 #include "SCharacter.generated.h"
 
+//Expose class to help compiler
+class UCameraComponent;
+
 UCLASS()
 class ROBOCOOP_API ASCharacter : public ACharacter
 {
@@ -23,6 +26,10 @@ protected:
 	void MoveForward(float Value);
 
 	void MoveRight(float Value);
+
+	//Create new Camera Component
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	UCameraComponent* CameraComp;
 
 public:	
 	// Called every frame
