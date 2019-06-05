@@ -8,6 +8,7 @@
 
 //Expose class to help compiler
 class UCameraComponent;
+class USpringArmComponent;
 
 UCLASS()
 class ROBOCOOP_API ASCharacter : public ACharacter
@@ -30,6 +31,10 @@ protected:
 	//Create new Camera Component
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UCameraComponent* CameraComp;
+
+	//Add Spring Arm Component
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	USpringArmComponent* SpringArmComp;
 
 public:	
 	// Called every frame
