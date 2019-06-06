@@ -19,7 +19,7 @@ ASArm::ASArm()
 	MeshComp = CreateAbstractDefaultSubobject<USkeletalMeshComponent>(TEXT("MeshComp"));
 	RootComponent = MeshComp;
 
-	MuzzleSocketName = "BoneSocket";
+	MuzzleSocketName = "MuzzleSocket";
 	TracerTargetName = "Target";
 }
 
@@ -68,6 +68,7 @@ void ASArm::Grab()
 			UGameplayStatics::ApplyPointDamage(HitActor, 20.0f, ShotDirection, Hit, MyOwner->GetInstigatorController(), this, DamageType);
 
 
+
 			if (ImpactEffect)
 			{
 				UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactEffect, Hit.ImpactPoint, Hit.ImpactNormal.Rotation());
@@ -78,6 +79,13 @@ void ASArm::Grab()
 
 		//Create a debug line with start and end locations, color, render time, depth priority, and thickness)
 		DrawDebugLine(GetWorld(), EyeLocation, TraceEnd, FColor::Red, false, 1.0f, 0, 1.0f);
+
+		//Check if Muzzle Effect exists so the engine doesn't crash
+		if (MuzzleEffect)
+		{
+			//Spawn Emitter on Arm
+			UGameplayStatics::SpawnEmitterAttached(MuzzleEffect, MeshComp, MuzzleSocketName);
+		}
 
 
 		if (TracerEffect)
