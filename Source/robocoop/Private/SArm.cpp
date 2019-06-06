@@ -3,6 +3,7 @@
 
 #include "SArm.h"
 #include "DrawDebugHelpers.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 ASArm::ASArm()
@@ -33,6 +34,8 @@ void ASArm::Grab()
 		FRotator EyeRotation;
 		MyOwner->GetActorEyesViewPoint(EyeLocation, EyeRotation);
 
+		FVector ShotDirection = EyeRotation.Vector();
+
 		//Create a direction vector for the raycast
 		FVector TraceEnd = EyeLocation + (EyeRotation.Vector() * 10000);
 
@@ -50,6 +53,9 @@ void ASArm::Grab()
 		{
 			// On Blocking Hit, process Arm Grab
 
+			AActor* HitActor = Hit.GetActor();
+
+			UGameplayStatics::ApplyPointDamage(HitActor, 20.0f, ShotDirection, Hit, MyOwner->GetInstigatorController(), this, DamageType);
 		}
 
 		//Create a debug line with start and end locations, color, render time, depth priority, and thickness)

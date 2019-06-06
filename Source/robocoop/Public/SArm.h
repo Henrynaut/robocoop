@@ -7,6 +7,7 @@
 #include "SArm.generated.h"
 
 class USkeletalMeshComponent;
+class UDamageType;
 
 UCLASS()
 class ROBOCOOP_API ASArm : public AActor
@@ -26,6 +27,9 @@ protected:
 
 	UFUNCTION(BlueprintCallable, Category = "Arm")
 	void Grab();
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Arm")
+	TSubclassOf<UDamageType> DamageType;
 
 public:	
 	// Called every frame
