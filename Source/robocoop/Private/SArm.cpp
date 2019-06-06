@@ -2,6 +2,7 @@
 
 
 #include "SArm.h"
+#include "DrawDebugHelpers.h"
 
 // Sets default values
 ASArm::ASArm()
@@ -19,6 +20,41 @@ void ASArm::BeginPlay()
 {
 	Super::BeginPlay();
 	
+}
+
+void ASArm::Grab()
+{
+	//Trace the world, from pawn eyes to crosshair location
+
+	AActor* MyOwner = GetOwner();
+	if (MyOwner)
+	{
+		FVector EyeLocation;
+		FRotator EyeRotation;
+		MyOwner->GetActorEyesViewPoint(EyeLocation, EyeRotation);
+
+		//Create a direction vector for the raycast
+		FVector TraceEnd = EyeLocation + (EyeRotation.Vector() * 10000);
+
+		//Create QueryParams Struct that lets us ignore the owner and robot arm
+		//However, it traces against each individual triangle of the mesh it is hitting (Complex Collision)
+		FCollisionQueryParams QueryParams;
+		QueryParams.AddIgnoredActor(MyOwner);
+		QueryParams.AddIgnoredActor(this);
+		QueryParams.bTraceComplex = true;
+
+		FHitResult Hit;
+
+		//Define a raycast with a Hit Result, Start, End, Collision Channel, and FCollisionQueryParams Parameter
+		if (GetWorld()->LineTraceSingleByChannel(Hit, EyeLocation, TraceEnd, ECC_Visibility, QueryParams))
+		{
+			// On Blocking Hit, process Arm Grab
+
+		}
+
+		//Create a debug line with start and end locations, color, render time, depth priority, and thickness)
+		DrawDebugLine(GetWorld(), EyeLocation, TraceEnd, FColor::Red, false, 1.0f, 0, 1.0f);
+	}
 }
 
 // Called every frame
