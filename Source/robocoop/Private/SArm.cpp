@@ -78,7 +78,7 @@ void ASArm::Grab()
 		}
 
 		//Create a debug line with start and end locations, color, render time, depth priority, and thickness)
-		DrawDebugLine(GetWorld(), EyeLocation, TraceEnd, FColor::Red, false, 1.0f, 0, 1.0f);
+		//DrawDebugLine(GetWorld(), EyeLocation, TraceEnd, FColor::Red, false, 1.0f, 0, 1.0f);
 
 		//Check if Muzzle Effect exists so the engine doesn't crash
 		if (MuzzleEffect)
