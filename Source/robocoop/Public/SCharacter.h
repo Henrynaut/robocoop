@@ -43,4 +43,8 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+
+	//Override definition of Pawn Eye Height from Engine Code
+	virtual FVector GetPawnViewLocation() const override;
+
 };
