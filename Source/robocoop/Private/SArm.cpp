@@ -4,6 +4,10 @@
 #include "SArm.h"
 #include "DrawDebugHelpers.h"
 #include "Kismet/GameplayStatics.h"
+#include "Particles/ParticleSystem.h"
+#include "Components/SkeletalMeshComponent.h"
+#include "Particles/ParticleSystemComponent.h"
+
 
 // Sets default values
 ASArm::ASArm()
@@ -14,6 +18,9 @@ ASArm::ASArm()
 	//Create Robotic arm and set it as the root component
 	MeshComp = CreateAbstractDefaultSubobject<USkeletalMeshComponent>(TEXT("MeshComp"));
 	RootComponent = MeshComp;
+
+	MuzzleSocketName = "BoneSocket";
+	TracerTargetName = "Target";
 }
 
 // Called when the game starts or when spawned
@@ -46,6 +53,9 @@ void ASArm::Grab()
 		QueryParams.AddIgnoredActor(this);
 		QueryParams.bTraceComplex = true;
 
+		//Particle "Target" Parameter
+		FVector TracerEndPoint = TraceEnd;
+
 		FHitResult Hit;
 
 		//Define a raycast with a Hit Result, Start, End, Collision Channel, and FCollisionQueryParams Parameter
@@ -56,10 +66,31 @@ void ASArm::Grab()
 			AActor* HitActor = Hit.GetActor();
 
 			UGameplayStatics::ApplyPointDamage(HitActor, 20.0f, ShotDirection, Hit, MyOwner->GetInstigatorController(), this, DamageType);
+
+
+			if (ImpactEffect)
+			{
+				UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactEffect, Hit.ImpactPoint, Hit.ImpactNormal.Rotation());
+			}
+
+			TracerEndPoint = Hit.ImpactPoint;
 		}
 
 		//Create a debug line with start and end locations, color, render time, depth priority, and thickness)
 		DrawDebugLine(GetWorld(), EyeLocation, TraceEnd, FColor::Red, false, 1.0f, 0, 1.0f);
+
+
+		if (TracerEffect)
+		{
+			FVector MuzzleLocation = MeshComp->GetSocketLocation(MuzzleSocketName);
+
+			UParticleSystemComponent* TracerComp = UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), TracerEffect, MuzzleLocation);
+			if (TracerComp)
+				{
+				TracerComp->SetVectorParameter(TracerTargetName, TracerEndPoint);
+				}
+
+		}
 	}
 }
 
