@@ -4,6 +4,9 @@
 #include "SCharacter.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Components/InputComponent.h"
+
+#include "Net/UnrealNetwork.h"
 
 // Sets default values
 ASCharacter::ASCharacter()
@@ -72,5 +75,20 @@ FVector ASCharacter::GetPawnViewLocation() const
 	return Super::GetPawnViewLocation();
 
 }
+
+
+//Function that sets which props are replicated
+//void ASCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+//{
+//	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+//
+//	//Replicate to any relevant client connected to server
+//	//DOREPLIFETIME(ASCharacter, );
+//}
+
+//void ASCharacter::StartGrab()
+//{
+//	if ()
+//}
 
 

@@ -29,6 +29,10 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "Arm")
 	void Grab();
 
+	//Whenever this is run, it pushes a request to the server instead of running on client
+	UFUNCTION(Server, Reliable, WithValidation)
+	void ServerGrab();
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Arm")
 	TSubclassOf<UDamageType> DamageType;
 

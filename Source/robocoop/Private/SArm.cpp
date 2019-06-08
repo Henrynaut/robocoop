@@ -21,6 +21,9 @@ ASArm::ASArm()
 
 	MuzzleSocketName = "MuzzleSocket";
 	TracerTargetName = "Target";
+
+	//Enable as Replicated Actor
+	SetReplicates(true);
 }
 
 // Called when the game starts or when spawned
@@ -33,6 +36,14 @@ void ASArm::BeginPlay()
 void ASArm::Grab()
 {
 	//Trace the world, from pawn eyes to crosshair location
+
+	//If the Role is a client, only run the ServerFire function,
+	//passing a request to the server
+	if (Role < ROLE_Authority)
+	{
+		ServerGrab();
+		return;
+	}
 
 	AActor* MyOwner = GetOwner();
 	if (MyOwner)
@@ -102,10 +113,27 @@ void ASArm::Grab()
 	}
 }
 
+void ASArm::ServerGrab()
+{
+	Grab();
+}
+
 // Called every frame
 void ASArm::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
 }
+
+
+////UE4 requires "Server" prefix and "_Implementation" afterwards
+//void ASArm::ServerGrab_Implementation()
+//{
+//	Grab();
+//}
+//
+//bool ASArm::ServerGrab_Validate()
+//{
+//	return true;
+//}
 
