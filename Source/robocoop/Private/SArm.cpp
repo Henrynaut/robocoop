@@ -37,13 +37,13 @@ void ASArm::Grab()
 {
 	//Trace the world, from pawn eyes to crosshair location
 
-	//If the Role is a client, only run the ServerFire function,
-	//passing a request to the server
-	if (Role < ROLE_Authority)
-	{
-		ServerGrab();
-		return;
-	}
+	////If the Role is a client, only run the ServerGrab function,
+	////passing a request to the server
+	//if (Role < ROLE_Authority)
+	//{
+	//	ServerGrab();
+	//	return;
+	//}
 
 	AActor* MyOwner = GetOwner();
 	if (MyOwner)
@@ -79,10 +79,10 @@ void ASArm::Grab()
 			UGameplayStatics::ApplyPointDamage(HitActor, 20.0f, ShotDirection, Hit, MyOwner->GetInstigatorController(), this, DamageType);
 
 
-
+			//If grab crosshair has a hit (collides), spawn emitter attached to hit location
 			if (ImpactEffect)
 			{
-				UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactEffect, Hit.ImpactPoint, Hit.ImpactNormal.Rotation());
+				UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), MuzzleEffect, Hit.ImpactPoint, Hit.ImpactNormal.Rotation());
 			}
 
 			TracerEndPoint = Hit.ImpactPoint;
@@ -103,20 +103,25 @@ void ASArm::Grab()
 		{
 			FVector MuzzleLocation = MeshComp->GetSocketLocation(MuzzleSocketName);
 
-			UParticleSystemComponent* TracerComp = UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), TracerEffect, MuzzleLocation);
-			if (TracerComp)
-				{
-				TracerComp->SetVectorParameter(TracerTargetName, TracerEndPoint);
-				}
+			//Spawn Emitter tractor beam attached to arm
+			UParticleSystemComponent* TracerComp = UGameplayStatics::SpawnEmitterAttached(TracerEffect, MeshComp, MuzzleSocketName, MuzzleLocation);
+			
+			//Spawn Static Emitter
+			//UParticleSystemComponent* TracerComp = UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), TracerEffect, MuzzleLocation);
+
+			//if (TracerComp)
+			//	{
+			//	TracerComp->SetVectorParameter(TracerTargetName, TracerEndPoint);
+			//	}
 
 		}
 	}
 }
 
-void ASArm::ServerGrab()
-{
-	Grab();
-}
+//void ASArm::ServerGrab()
+//{
+//	Grab();
+//}
 
 // Called every frame
 void ASArm::Tick(float DeltaTime)
