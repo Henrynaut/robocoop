@@ -104,15 +104,15 @@ void ASArm::Grab()
 			FVector MuzzleLocation = MeshComp->GetSocketLocation(MuzzleSocketName);
 
 			//Spawn Emitter tractor beam attached to arm
-			UParticleSystemComponent* TracerComp = UGameplayStatics::SpawnEmitterAttached(TracerEffect, MeshComp, MuzzleSocketName, MuzzleLocation);
+			//UParticleSystemComponent* TracerComp = UGameplayStatics::SpawnEmitterAttached(TracerEffect, MeshComp, MuzzleSocketName, MuzzleLocation);
 			
 			//Spawn Static Emitter
-			//UParticleSystemComponent* TracerComp = UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), TracerEffect, MuzzleLocation);
+			UParticleSystemComponent* TracerComp = UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), TracerEffect, MuzzleLocation);
 
-			//if (TracerComp)
-			//	{
-			//	TracerComp->SetVectorParameter(TracerTargetName, TracerEndPoint);
-			//	}
+			if (TracerComp)
+				{
+				TracerComp->SetVectorParameter(TracerTargetName, TracerEndPoint);
+				}
 
 		}
 	}
